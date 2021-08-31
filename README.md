@@ -23,7 +23,7 @@ notes: Due to limited time, this project is only handle in mobile view.
 - Detail page of movie
 
 ## TODO
-Due to limited time to complete this simple project, there are some update that need to apply:
+Due to limited time to complete this simple project, there are some important update that need to apply such as:
 
 - Add testing for component
 - Update detail page information
