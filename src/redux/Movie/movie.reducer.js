@@ -1,9 +1,21 @@
-import { START_FETCH_MOVIES, SUCCESS_FETCH_MOVIES, FAILED_FETCH_MOVIES } from "./movie.types";
+import {
+  START_FETCH_MOVIES,
+  SUCCESS_FETCH_MOVIES,
+  FAILED_FETCH_MOVIES,
+  FAILED_FETCH_NEXT_MOVIES,
+  START_FETCH_NEXT_MOVIES,
+  SUCCESS_FETCH_NEXT_MOVIES,
+  SET_SEARCH_KEYWORD,
+} from "./movie.types";
 
 const INITIAL_STATE = {
   isLoading: false,
+  isFetchNextPage: false,
   data: [],
-  errorMessage: '',
+  errorMessage: "",
+  page: 1,
+  totalResult: 0,
+  searchKeyword: "",
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -11,14 +23,18 @@ const reducer = (state = INITIAL_STATE, action) => {
     case START_FETCH_MOVIES:
       return {
         ...state,
-        errorMessage: '',
+        errorMessage: "",
         isLoading: true,
+        totalResult: 0,
+        page: 1,
       };
 
     case SUCCESS_FETCH_MOVIES:
       return {
-        data: action.payload,
-        errorMessage: '',
+        ...state,
+        data: action.payload.movies,
+        totalResult: action.payload.totalResult,
+        errorMessage: "",
         isLoading: false,
       };
 
@@ -28,6 +44,36 @@ const reducer = (state = INITIAL_STATE, action) => {
         errorMessage: action.payload,
         isLoading: false,
       };
+
+    case START_FETCH_NEXT_MOVIES:
+      return {
+        ...state,
+        isFetchNextPage: true,
+      };
+
+    case SUCCESS_FETCH_NEXT_MOVIES:
+      return {
+        ...state,
+        isFetchNextPage: false,
+        data: [
+          ...state.data,
+          ...action.payload.movies,
+        ],
+        page: action.payload.page,
+      };
+
+    case FAILED_FETCH_NEXT_MOVIES:
+      return {
+        ...state,
+        isFetchNextPage: false,
+        errorMessage: action.payload,
+      };
+
+    case SET_SEARCH_KEYWORD:
+      return {
+        ...state,
+        searchKeyword: action.payload,
+      }
 
     default:
       return state;
